@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"reflect"
@@ -50,14 +49,12 @@ func main() {
 		log.Printf("error:%v\n", err)
 		return
 	}
-	for _, f := range myApp.Flags {
-		fValue := reflect.Indirect(reflect.ValueOf(f))
-		typeOfT := fValue.Type()
-		for i := 0; i < fValue.NumField(); i++ {
-			ff := fValue.Field(i)
-			fmt.Printf("%d: %s %s = %v %v\n", i,
-				typeOfT.Field(i).Name, ff.Type(), ff.Interface(), ff.CanSet())
-		}
+	for i := 0; i < len(myApp.Flags); i++ {
+		f := &myApp.Flags[i]
+		fValue := reflect.ValueOf(f)
+		//fValue := reflect.ValueOf(f).Elem()
+		//fValue := reflect.Indirect(reflect.ValueOf(f))
+		//fValue := reflect.Indirect(reflect.ValueOf(f).Elem())
 
 		varValue := fValue.FieldByName("Name")
 		if !varValue.IsValid() {
